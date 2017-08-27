@@ -79,6 +79,7 @@ typedef enum {
 	SpellLanguages,
 	StrictTLS,
 	Style,
+	Insert,
 	ZoomLevel,
 	ParameterLast
 } ParamName;
@@ -217,6 +218,7 @@ static void zoom(Client *c, const Arg *a);
 static void scroll(Client *c, const Arg *a);
 static void navigate(Client *c, const Arg *a);
 static void stop(Client *c, const Arg *a);
+static void insert(Client *c, const Arg *a);
 static void toggle(Client *c, const Arg *a);
 static void togglefullscreen(Client *c, const Arg *a);
 static void togglecookiepolicy(Client *c, const Arg *a);
@@ -1265,7 +1267,14 @@ winevent(GtkWidget *w, GdkEvent *e, Client *c)
 				if (gdk_keyval_to_lower(e->key.keyval) ==
 				    keys[i].keyval &&
 				    CLEANMASK(e->key.state) == keys[i].mod &&
-				    keys[i].func) {
+				    keys[i].func &&
+
+				    /* There is probably a more elegant way 
+				     * than filtering escape. */
+
+				    (!curconfig[Insert].val.i ||
+				    keys[i].keyval ==
+				    GDK_KEY_Escape)) {
 					updatewinid(c);
 					keys[i].func(c, &(keys[i].arg));
 					return TRUE;
@@ -1805,7 +1814,22 @@ navigate(Client *c, const Arg *a)
 void
 stop(Client *c, const Arg *a)
 {
+	
+	curconfig[Insert].val.i = 0;
 	webkit_web_view_stop_loading(c->view);
+}
+
+void
+insert(Client *c, const Arg *a)
+{
+	
+	curconfig[Insert].val.i = 1;
+}
+
+void
+hint(Client *c, const Arg *a)
+{
+	printf("");
 }
 
 void
