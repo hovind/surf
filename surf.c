@@ -26,6 +26,7 @@
 #include <gcr/gcr.h>
 #include <JavaScriptCore/JavaScript.h>
 #include <webkit2/webkit2.h>
+#include <webkitdom/webkitdom.h>
 #include <X11/X.h>
 #include <X11/Xatom.h>
 
@@ -1352,7 +1353,7 @@ createwindow(Client *c)
 		w = gtk_window_new(GTK_WINDOW_TOPLEVEL);
 
 		wmstr = g_path_get_basename(argv0);
-		gtk_window_set_wmclass(GTK_WINDOW(w), wmstr, "Surf");
+		gtk_window_set_role(GTK_WINDOW(w), wmstr);
 		g_free(wmstr);
 
 		wmstr = g_strdup_printf("%s[%lu]", "Surf",
@@ -1822,14 +1823,25 @@ stop(Client *c, const Arg *a)
 void
 insert(Client *c, const Arg *a)
 {
-	
 	curconfig[Insert].val.i = 1;
 }
 
 void
 hint(Client *c, const Arg *a)
 {
-	printf("");
+	/*WebKitDOMDocument* doc;
+	WebKitDOMHTMLCollection *collection;
+	gulong length;
+	guint i;
+
+	doc = webkit_web_view_get_dom_document(c->view);
+	collection = webkit_dom_document_get_links(doc);
+	length = webkit_dom_html_collection_get_length(collection);
+	for (i = 0; i < length; ++i) {
+		WebKitDOMElement *el = webkit_dom_html_collection_item(collection, i);
+		gchar *href = webkit_dom_element_get_attribute(el, "href");
+		printf("%s\n", href);
+	}*/
 }
 
 void
